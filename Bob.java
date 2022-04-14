@@ -7,44 +7,72 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Base64;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import java.security.Key;
+import java.security.SecureRandom;
+import javax.crypto.SecretKey;
 
-public class Bob {
+
+public class Bob  {
    //1- generate public and private key for Bob 
-   static KeyPair keyPair = genKeyPair(1024);
+   static KeyPair keyPair = genKeyPair(128);
    static PublicKey BobpublicKey=keyPair.getPublic();
+
 
     static String RandomKey ="mykey";
     static final String IV = "AAACCCDDDYYUURRS"; // 16 byte
  // encrypt and decrypt need the same IV.
  // initialization vector of the same size as the key, 
+    private static byte[] ss;
  
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, Exception {
+    
+        
+KeyGenerator generator = KeyGenerator.getInstance("AES");
+generator.init(128); // The AES key size in number of bits
+SecretKey secKey = generator.generateKey(); 
+        
         PrivateKey BobprivateKey = keyPair.getPrivate();
+        PrivateKey AliceprivateKey = keyPair.getPrivate();
        
         System.out.println("1- generate random key : "+RandomKey);
         
         String file = readFile("File.txt");
-        String EncrypteFile = AESencrypt(RandomKey,IV,file);
+        
+        Cipher aesCipher = Cipher.getInstance("AES");
+        aesCipher.init(Cipher.ENCRYPT_MODE, secKey);
+       byte[] byteCipherText = aesCipher.doFinal(file.getBytes());
+
+
+       // String EncrypteFile = AESencrypt(RandomKey,IV,file);
         PrintWriter writer = new PrintWriter("EncryptedFile.txt", "UTF-8"); // now this is the cipher text
-        writer.print(EncrypteFile);
+        writer.print(byteCipherText);
         writer.close();
         System.out.println("Encrypt the file by AES ");
         System.out.print("The file : "+ file);
-        System.out.println("After encrypted : "+EncrypteFile);
+        System.out.println("After encrypted : "+byteCipherText);
         //String s = Base64.getEncoder().encodeToString(encryptedBytes);
        System.out.println();
        System.out.println("2- Encryption the random key by RSA ");
        System.out.println("The key : "+RandomKey);
-         byte[] EncrypteKey= RSAencrypt(RandomKey.getBytes(),Alice.AlicepublicKey);
-         String EncrypteKeyString = Base64.getEncoder().encodeToString(EncrypteKey);
-         PrintWriter writer2 = new PrintWriter("EncryptedKey.txt", "UTF-8"); // now this is the cipher text
-         writer.print(EncrypteKeyString);
-         writer.close();
-       System.out.println("After encrypted : "+EncrypteKeyString);
        
+Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+cipher.init(Cipher.PUBLIC_KEY, Alice.AlicepublicKey);
+byte[] encryptedKey = cipher.doFinal(secKey.getEncoded()/*Seceret Key From Step 1*/);
+
+
+
+        // byte[] EncrypteKey= RSAencrypt(RandomKey.getBytes(),Alice.AlicepublicKey);
+       // String EncrypteKeyString = Base64.getEncoder().encodeToString(EncrypteKey);
+        PrintWriter writer2 = new PrintWriter("EncryptedKey.txt", "UTF-8"); // now this is the cipher text
+         writer2.print(encryptedKey);
+         writer2.close();
+       System.out.println("After encrypted : "+encryptedKey);
        
 
  
@@ -123,6 +151,9 @@ public class Bob {
             return null;
         }
     }
+
+ 
+     
 
    
     
