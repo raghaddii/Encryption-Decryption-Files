@@ -21,22 +21,33 @@ public class Bob {
  // encrypt and decrypt need the same IV.
  // initialization vector of the same size as the key, 
  
-    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, Exception {
         PrivateKey BobprivateKey = keyPair.getPrivate();
        
-        try {
-            test_encrypt_decrypt();
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-            System.exit(1);
-        }
-    
-        byte[] encryptedBytes = RSAencrypt(RandomKey.getBytes(),Alice.AlicepublicKey);
-        PrintWriter writer = new PrintWriter("RSA_encryptedKey.txt", "UTF-8"); // now this is the cipher text
-        writer.print(encryptedBytes);
+        System.out.println("1- generate random key : "+RandomKey);
+        
+        String file = readFile("File.txt");
+        String EncrypteFile = AESencrypt(RandomKey,IV,file);
+        PrintWriter writer = new PrintWriter("EncryptedFile.txt", "UTF-8"); // now this is the cipher text
+        writer.print(EncrypteFile);
         writer.close();
-        System.out.print(encryptedBytes);
-  
+        System.out.println("Encrypt the file by AES ");
+        System.out.print("The file : "+ file);
+        System.out.println("After encrypted : "+EncrypteFile);
+        //String s = Base64.getEncoder().encodeToString(encryptedBytes);
+       System.out.println();
+       System.out.println("2- Encryption the random key by RSA ");
+       System.out.println("The key : "+RandomKey);
+         byte[] EncrypteKey= RSAencrypt(RandomKey.getBytes(),Alice.AlicepublicKey);
+         String EncrypteKeyString = Base64.getEncoder().encodeToString(EncrypteKey);
+         PrintWriter writer2 = new PrintWriter("EncryptedKey.txt", "UTF-8"); // now this is the cipher text
+         writer.print(EncrypteKeyString);
+         writer.close();
+       System.out.println("After encrypted : "+EncrypteKeyString);
+       
+       
+
+ 
     }
     
        public static KeyPair genKeyPair(int keyLength) {
@@ -49,30 +60,8 @@ public class Bob {
             return null;
         }
     }
-       public static String base64Encode(byte[] src) {
-        return new String(Base64.getEncoder().encode(src));
-    }
-
-    public static void test_encrypt_decrypt() throws Exception {
-        // encrypt "in.txt" -> "out.txt" means convert the plaintext to cipher text
-        
-        // 2- generate random key then encrypt the file by this key usint AES 
-        String s = readFile("PlainText1.txt"); // the plain text
-        String res = AESencrypt(RandomKey , IV, s); // "s= plaintext
-        PrintWriter writer = new PrintWriter("CipherText.txt", "UTF-8"); // now this is the cipher text
-        writer.print(res);
-        writer.close();
-        System.out.println("Encryption the file:");
-        System.out.print("The plain Text is : "+s);
-        System.out.println("The cipher Text is : "+res);
+ 
    
-       
-    }
-      public static void encrypt(String key, File inputFile, File outputFile) throws Exception {
-        doCrypto(Cipher.ENCRYPT_MODE, key, inputFile, outputFile);
-    }
-
-    
      public static String readFile(String filename) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(filename));
         try {
@@ -89,26 +78,7 @@ public class Bob {
             br.close();
         }
     }
-      static void doCrypto(int cipherMode, String key, File inputFile,
-                          File outputFile) throws Exception {
-        Key secretKey = new SecretKeySpec(key.getBytes(), "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(cipherMode, secretKey);
-
-        FileInputStream inputStream = new FileInputStream(inputFile);
-        byte[] inputBytes = new byte[(int) inputFile.length()];
-        inputStream.read(inputBytes);
-
-        byte[] outputBytes = cipher.doFinal(inputBytes);
-
-        FileOutputStream outputStream = new FileOutputStream(outputFile);
-        outputStream.write(outputBytes);
-
-        inputStream.close();
-        outputStream.close();
-    }
-
-
+     
 
     public static String AESencrypt(String key, String iv, String msg) throws Exception {
  // from here 
