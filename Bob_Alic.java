@@ -47,7 +47,7 @@ public class Bob_Alic {
             stringKey=secKey.toString().substring(stringKey.lastIndexOf(".") + 1);  //TO AVOID UNNECESSARY CHARACTERS
             System.out.println("1- generate random key : "+stringKey);
             System.out.println("Encrypt the file by AES ");
-            String file = readFile("/Users/Areej/Documents/GitHub/Encryption-Decryption-Files/is_project/File.txt");
+            String file = readFile("/Users/Areej/Documents/GitHub/Encryption-Decryption-Files/is_project/File.txt");//TOBE CHANGED BASED ON THE DIRECTORY
             EncryptedFile = AES_Encryption(file,secKey);
             PrintWriter writer = new PrintWriter("EncryptedFile.txt", "UTF-8"); // now this is the cipher text
             writer.print(EncryptedFile);
