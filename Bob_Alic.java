@@ -54,7 +54,7 @@ public class Bob_Alic {
             writer.close();
             System.out.print("The file : "+ file);
             System.out.println("After encrypted : "+EncryptedFile);
-            ////////////////////////////////////////////////////END OF ENC KEY////////////////////////////
+            ////////////////////////////////////////////////////END OF ENC FILE////////////////////////////
             System.out.println();
             System.out.println("2- Encryption the random key by RSA ");
             System.out.println("The key : "+stringKey);
