@@ -73,7 +73,7 @@ public class Bob_Alic {
        System.out.println("--------------------- ALICE -------------------");
        System.out.println("3- Decryption the random key by RSA ");
        String EncryptedKeyFromFile=readFile("EncryptedKey.txt");
-       System.out.print("The key : "+EncryptedKeyFromFile);
+       System.out.print("The enrypted key : "+EncryptedKeyFromFile);
        byte[] decryptedKey = RSA_Decryption(AliceprivateKey,encryptedKey);
        System.out.println("After decrypted : "+decryptedKey);
 
@@ -82,7 +82,7 @@ public class Bob_Alic {
        System.out.println("4- Decryption the File by AES ");
        String plainText= AES_Decryption(EncryptedFile,decryptedKey);
        String cipher=readFile("EncryptedFile.txt");
-       System.out.print("The file : "+cipher);
+       System.out.print("The enrypted file : "+cipher);
        System.out.println("After decrypted : "+plainText);
             
         }
