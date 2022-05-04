@@ -41,7 +41,7 @@ public class Bob_Alic {
     }
 
     ///////--INNER CLASS ENC/////
-    static class INCRYPTION{
+    static class ENCRYPTION{
         public byte[]  Enc()throws Exception , NoSuchAlgorithmException{
             System.out.println("--------------------- BOB -------------------");
             stringKey=secKey.toString().substring(stringKey.lastIndexOf(".") + 1);  //TO AVOID UNNECESSARY CHARACTERS
@@ -91,7 +91,7 @@ public class Bob_Alic {
     //////////////////////--CALLING METHODS--//////////////////////////////
     public static byte[]  callEnc() throws Exception , NoSuchAlgorithmException 
     {
-        INCRYPTION n= new INCRYPTION();
+        ENCRYPTION n= new ENCRYPTION();
         byte[] encryptedKey =n.Enc();
         return encryptedKey;
     }
