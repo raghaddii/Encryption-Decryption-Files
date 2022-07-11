@@ -1,5 +1,5 @@
 # Encryption-Decryption-Files
-## CS334-Project
+## Project description
 
 The project is to make a secure connection between Bob (Sender) and Alice (Receiver) in sending text and a secure key.
 The message that was sent contains two files. 1st represent the text message that Bob sent and encrypted by the random key using the AES approach. 
